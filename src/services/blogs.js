@@ -7,9 +7,10 @@ const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
 };
 
-const getAll = () => {
+const getAll = async () => {
   const request = axios.get(baseUrl);
-  return request.then((response) => response.data);
+  const response = await request;
+  return response.data;
 };
 
 const like = async (id) => {
@@ -17,7 +18,7 @@ const like = async (id) => {
     headers: { Authorization: token },
   };
   const blogToChange = (await axios.get(`${baseUrl}/${id}`)).data
-  const newObject = { ...blogToChange, votes: blogToChange.votes + 1 }
+  const newObject = { ...blogToChange, likes: blogToChange.likes + 1 }
   const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
   return response.data;
 };
@@ -31,10 +32,12 @@ const create = async (newObject) => {
 };
 
 const remove = async (id) => {
+  console.log('token in remove,', token);
   const config = {
     headers: { Authorization: token },
   };
   const response = await axios.delete(`${baseUrl}/${id}`, config);
+  console.log(response);
   return response.data;
 };
 export default { getAll, setToken, create, like, remove };
