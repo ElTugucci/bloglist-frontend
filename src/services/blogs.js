@@ -32,7 +32,6 @@ const create = async (newObject) => {
 };
 
 const remove = async (id) => {
-  console.log('token in remove,', token);
   const config = {
     headers: { Authorization: token },
   };
@@ -40,4 +39,16 @@ const remove = async (id) => {
   console.log(response);
   return response.data;
 };
-export default { getAll, setToken, create, like, remove };
+
+const comment = async (id, comment) => {
+  const blogToChange = (await axios.get(`${baseUrl}/${id}`)).data
+  const newObject = { ...blogToChange, comments: (blogToChange.comments || []).concat(comment) }
+  const config = {
+    headers: { Authorization: token },
+  }
+  const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
+  console.log(response)
+  return response.data;
+}
+
+export default { getAll, setToken, create, like, remove, comment };

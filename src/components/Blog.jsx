@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
-import { blogLike, blogDelete } from "../reducers/blogReducer"; // assuming blogDelete is imported from blogReducer
+import { blogLike, blogDelete, commentAdd } from "../reducers/blogReducer";
 import { setError } from "../reducers/errorReducer";
 import { setNotification } from "../reducers/notificationReducer";
-const Blog = ({ blogs }) => {
+const Blog = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [showDelete, setShowDelete] = useState(false);
   const loggedUser = JSON.parse(localStorage.getItem("loggedBlogappUser"));
+  const blogs = useSelector(state => {
+    return state.blogs
+  })
+
 
   useEffect(() => {
     if (blogs && blogs.length > 0) {
@@ -27,6 +31,8 @@ const Blog = ({ blogs }) => {
     }
   };
 
+
+
   const deleteBlog = async () => {
     const currentBlog = blogs.find(b => b.id === id);
     if (window.confirm(`Do you want to delete ${currentBlog.title} by ${currentBlog.author}`)) {
@@ -40,17 +46,19 @@ const Blog = ({ blogs }) => {
     }
   };
 
+
+  const addCommentHandler = async (event) => {
+    event.preventDefault();
+    const comment = event.target.comment.value;
+    event.target.comment.value = '';
+    try {
+      await dispatch(commentAdd(id, comment));
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
   const blogDiv = () => {
     const blog = blogs.find(b => b.id === id);
-
-    const addComment = async (event) => {
-      event.preventDefault()
-      const comment = event.target.comment.value
-      event.target.comment.value = ''
-
-      console.log(comment);
-    }
-
     return (
       <>
         <h2>{blog.title}</h2>
@@ -66,13 +74,22 @@ const Blog = ({ blogs }) => {
             delete
           </button>
         )}
-
-        <p>comments</p>
-        <form onSubmit={addComment}>
+        <h4>comments</h4>
+        <form onSubmit={addCommentHandler}>
           <input name="comment" />
           <button type="submit">add</button>
         </form>
-
+        {blog.comments && blog.comments.length > 0 ? (
+          <div>
+            <ul>
+              {blog.comments.map((c) => {
+                return <li key={c + Math.random(10000000)}>{c}</li>
+              })}
+            </ul>
+          </div >
+        ) : (
+          <div>no comments</div>
+        )}
 
       </>
     );
