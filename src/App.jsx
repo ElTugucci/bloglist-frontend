@@ -158,9 +158,9 @@ const App = () => {
 
   const UserStatus = () => {
     return (
-      <div>{user.name} logged in
+      <> {user.name} logged in
         <button onClick={() => logout()}>logout</button>
-      </div>
+      </>
     );
   };
 
@@ -196,6 +196,7 @@ const App = () => {
       </div>
     )
   }
+
 
   return (
     <Router>

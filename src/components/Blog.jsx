@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { blogLike, blogDelete, commentAdd } from "../reducers/blogReducer";
 import { setError } from "../reducers/errorReducer";
 import { setNotification } from "../reducers/notificationReducer";
@@ -9,6 +9,8 @@ const Blog = () => {
   const dispatch = useDispatch();
   const [showDelete, setShowDelete] = useState(false);
   const loggedUser = JSON.parse(localStorage.getItem("loggedBlogappUser"));
+  const navigate = useNavigate()
+
   const blogs = useSelector(state => {
     return state.blogs
   })
@@ -39,6 +41,7 @@ const Blog = () => {
       try {
         dispatch(blogDelete(currentBlog.id));
         dispatch(setNotification(`${currentBlog.title} deleted successfully`, 5));
+        navigate('/')
       } catch (exception) {
         console.log(exception);
         dispatch(setError(`${exception.response.data.error}`, 5));
