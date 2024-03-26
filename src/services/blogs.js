@@ -36,7 +36,6 @@ const remove = async (id) => {
     headers: { Authorization: token },
   };
   const response = await axios.delete(`${baseUrl}/${id}`, config);
-  console.log(response);
   return response.data;
 };
 
@@ -47,7 +46,6 @@ const comment = async (id, comment) => {
     headers: { Authorization: token },
   }
   const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
-  console.log(response)
   return response.data;
 }
 

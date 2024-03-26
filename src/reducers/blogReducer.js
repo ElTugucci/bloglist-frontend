@@ -23,10 +23,8 @@ const blogSlice = createSlice({
         },
         addComment(state, action) {
             const { id, comments } = action.payload;
-            console.log(action.payload)
             const blog = state.find(blog => blog.id === id);
             const newBlogComment = { ...blog, comments: comments }
-            console.log(newBlogComment);
             return state.map(blog => blog.id === id ? newBlogComment : blog)
         },
     }
