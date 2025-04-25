@@ -158,7 +158,10 @@ const App = () => {
 
   const UserStatus = () => {
     return (
-      <> {user.name} logged in
+      <>
+        <div>
+          {user.name} logged in
+        </div>
         <button onClick={() => logout()}>logout</button>
       </>
     );
@@ -204,7 +207,9 @@ const App = () => {
         <Link to="/">home</Link>
         <Link to="/users"> users</Link>
         {!user && <LoginForm />}
-        {user && <UserStatus />}
+        <div>
+          {user && <UserStatus />}
+        </div>
       </div>
       <div>
         <Notification />
